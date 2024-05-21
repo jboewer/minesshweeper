@@ -137,13 +137,13 @@ func (gv GameModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c", "q":
 			return gv, tea.Quit
-		case "w":
+		case "w", "k":
 			gv.Cursor.Up()
-		case "a":
+		case "a", "h":
 			gv.Cursor.Left()
-		case "s":
+		case "s", "j":
 			gv.Cursor.Down()
-		case "d":
+		case "d", "l":
 			gv.Cursor.Right()
 		case "f":
 			gv.Game.ToggleFlag(gv.Cursor.x, gv.Cursor.y)
