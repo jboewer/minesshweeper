@@ -57,13 +57,13 @@ type GameView struct {
 	Cursor Cursor
 }
 
-func (t GameView) View() string {
+func (gv GameView) View() string {
 	rendered := &strings.Builder{}
 
-	t.renderGameGrid(rendered)
+	gv.renderGameGrid(rendered)
 
 	// Write game state
-	switch t.Game.State() {
+	switch gv.Game.State() {
 	case game.StatePlaying:
 		rendered.WriteString("Playing")
 	case game.StateWon:
@@ -72,12 +72,16 @@ func (t GameView) View() string {
 		rendered.WriteString("Lost")
 	}
 
+	rendered.WriteString("\n")
+
+	gv.renderInstructions(rendered)
+
 	// Send the UI for rendering
 	return rendered.String()
 }
 
-func (t GameView) renderGameGrid(rendered *strings.Builder) {
-	grid := t.Game.GetGrid()
+func (gv GameView) renderGameGrid(rendered *strings.Builder) {
+	grid := gv.Game.GetGrid()
 
 	rows := make([][]string, grid.GetHeight())
 	for y := 0; y < grid.GetHeight(); y++ {
@@ -106,44 +110,10 @@ func (t GameView) renderGameGrid(rendered *strings.Builder) {
 		BorderColumn(true).
 		Rows(rows...).
 		StyleFunc(func(row, col int) lipgloss.Style {
-			var fg lipgloss.TerminalColor = lipgloss.NoColor{}
-			var bg lipgloss.TerminalColor = lipgloss.NoColor{}
+			fg, bg := getCellColors(rows[row-1][col])
 
-			switch rows[row-1][col] {
-			case "0":
-				fg = lipgloss.Color("#292929")
-			case "1":
-				fg = lipgloss.Color("#74adf2")
-			case "2":
-				fg = lipgloss.Color("#00FF00")
-			case "3":
-				fg = lipgloss.Color("#FF0000")
-			case "4":
-				fg = lipgloss.Color("#28706d")
-			case "5":
-				fg = lipgloss.Color("#b06446")
-			case "6":
-				fg = lipgloss.Color("#FF0000")
-			case "7":
-				fg = lipgloss.Color("#8a7101")
-			case "8":
-				fg = lipgloss.Color("#111")
-				bg = lipgloss.Color("#bfbfbf")
-			case "*":
-				fg = lipgloss.Color("#FF33FF")
-			case "F":
-				bg = lipgloss.Color("#ffee00")
-				fg = lipgloss.Color("#111")
-			case "B":
-				bg = lipgloss.Color("#FF0000")
-				fg = lipgloss.Color("#111")
-			case " ":
-				bg = lipgloss.Color("#bfbfbf")
-			}
-
-			if row == t.Cursor.y+1 && col == t.Cursor.x {
-				fg = lipgloss.Color("#111")
-				bg = lipgloss.Color("#FF33FF")
+			if row == gv.Cursor.y+1 && col == gv.Cursor.x {
+				fg, bg = getCursorColors(fg, bg)
 			}
 
 			return lipgloss.NewStyle().
@@ -155,31 +125,36 @@ func (t GameView) renderGameGrid(rendered *strings.Builder) {
 	rendered.WriteString(tbl.Render())
 	rendered.WriteString("\n")
 }
-func (t GameView) Init() tea.Cmd {
+
+func (gv GameView) Init() tea.Cmd {
 	return nil
 }
 
-func (t GameView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (gv GameView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "q":
-			return t, tea.Quit
+		case "ctrl+c", "q":
+			return gv, tea.Quit
 		case "w":
-			t.Cursor.Up()
+			gv.Cursor.Up()
 		case "a":
-			t.Cursor.Left()
+			gv.Cursor.Left()
 		case "s":
-			t.Cursor.Down()
+			gv.Cursor.Down()
 		case "d":
-			t.Cursor.Right()
+			gv.Cursor.Right()
 		case "f":
-			t.Game.ToggleFlag(t.Cursor.x, t.Cursor.y)
+			gv.Game.ToggleFlag(gv.Cursor.x, gv.Cursor.y)
 		case " ":
-			t.Game.RevealCell(t.Cursor.x, t.Cursor.y)
+			gv.Game.RevealCell(gv.Cursor.x, gv.Cursor.y)
 		}
 
 	}
 
-	return t, nil
+	return gv, nil
+}
+
+func (gv GameView) renderInstructions(rendered *strings.Builder) {
+	rendered.WriteString("WASD: Move Around, F: Toggle Flag, Space: Reveal")
 }
