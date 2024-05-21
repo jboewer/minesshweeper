@@ -4,13 +4,13 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
-	"github.com/jboewer/minesweeper/game"
+	"github.com/jboewer/mine-ssh-weeper/game"
 	"strconv"
 	"strings"
 )
 
-func NewGameView(g *game.Game) GameView {
-	return GameView{
+func NewGameModel(g *game.Game) GameModel {
+	return GameModel{
 		Game: g,
 		Cursor: Cursor{
 			game: g,
@@ -52,12 +52,12 @@ func (c *Cursor) Right() {
 	}
 }
 
-type GameView struct {
+type GameModel struct {
 	Game   *game.Game
 	Cursor Cursor
 }
 
-func (gv GameView) View() string {
+func (gv GameModel) View() string {
 	rendered := &strings.Builder{}
 
 	gv.renderGameGrid(rendered)
@@ -80,7 +80,7 @@ func (gv GameView) View() string {
 	return rendered.String()
 }
 
-func (gv GameView) renderGameGrid(rendered *strings.Builder) {
+func (gv GameModel) renderGameGrid(rendered *strings.Builder) {
 	grid := gv.Game.GetGrid()
 
 	rows := make([][]string, grid.GetHeight())
@@ -126,11 +126,11 @@ func (gv GameView) renderGameGrid(rendered *strings.Builder) {
 	rendered.WriteString("\n")
 }
 
-func (gv GameView) Init() tea.Cmd {
+func (gv GameModel) Init() tea.Cmd {
 	return nil
 }
 
-func (gv GameView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (gv GameModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -155,6 +155,6 @@ func (gv GameView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return gv, nil
 }
 
-func (gv GameView) renderInstructions(rendered *strings.Builder) {
+func (gv GameModel) renderInstructions(rendered *strings.Builder) {
 	rendered.WriteString("WASD: Move Around, F: Toggle Flag, Space: Reveal")
 }

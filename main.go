@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/jboewer/minesweeper/game"
-	"github.com/jboewer/minesweeper/tui"
+	"github.com/jboewer/mine-ssh-weeper/game"
+	"github.com/jboewer/mine-ssh-weeper/tui"
 	"os"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	g.PlaceRandomMines(10)
 
 	p := tea.NewProgram(
-		tui.NewGameView(g),
+		tui.NewGameModel(g),
 		tea.WithAltScreen(),
 	)
 	if _, err := p.Run(); err != nil {
