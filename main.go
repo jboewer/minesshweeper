@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/jboewer/mine-ssh-weeper/game"
-	"github.com/jboewer/mine-ssh-weeper/tui"
+	"github.com/jboewer/minesshweeper/game"
+	"github.com/jboewer/minesshweeper/tui"
 	"os"
 )
 

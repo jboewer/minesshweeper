@@ -4,7 +4,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
-	"github.com/jboewer/mine-ssh-weeper/game"
+	"github.com/jboewer/minesshweeper/game"
 	"log"
 	"strconv"
 	"strings"

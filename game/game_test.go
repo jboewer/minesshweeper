@@ -1,7 +1,7 @@
 package game_test
 
 import (
-	"github.com/jboewer/mine-ssh-weeper/game"
+	"github.com/jboewer/minesshweeper/game"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
