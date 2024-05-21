@@ -5,6 +5,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 	"github.com/jboewer/mine-ssh-weeper/game"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -148,13 +149,19 @@ func (gv GameModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			gv.Game.ToggleFlag(gv.Cursor.x, gv.Cursor.y)
 		case " ":
 			gv.Game.RevealCell(gv.Cursor.x, gv.Cursor.y)
+		case "r":
+			gv.Reset()
 		}
-
 	}
 
 	return gv, nil
 }
 
 func (gv GameModel) renderInstructions(rendered *strings.Builder) {
-	rendered.WriteString("WASD: Move Around, F: Toggle Flag, Space: Reveal")
+	rendered.WriteString("WASD: Move Around, F: Toggle Flag, Space: Reveal, R: Reset, Q: Quit")
+}
+
+func (gv GameModel) Reset() {
+	log.Println("Resetting game")
+	gv.Game.Reset()
 }

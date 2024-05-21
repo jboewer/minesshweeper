@@ -99,6 +99,9 @@ func (g *Game) GetMineCount() int {
 }
 
 func (g *Game) RevealCell(x int, y int) int {
+	if g.gameOver {
+		return -1
+	}
 	if g.cellHasMine(x, y) {
 		g.gameOver = true
 		return -1
@@ -311,4 +314,12 @@ func (g *Game) PlaceRandomMines(count int) error {
 	}
 
 	return nil
+}
+
+func (g *Game) Reset() {
+	g.mines = nil
+	g.flags = nil
+	g.revealedCells = nil
+	g.gameOver = false
+	g.PlaceRandomMines(10)
 }
