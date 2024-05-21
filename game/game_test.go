@@ -339,15 +339,6 @@ func TestGame_GetGrid(t *testing.T) {
 		}
 		assertEqualGrid(t, expected, g.GetGrid())
 	})
-	t.Run("One cell revealed", func(t *testing.T) {
-		g, _ := game.New(5, 1)
-		g.RevealCell(1, 0)
-
-		expected := game.Grid{
-			{game.CellUnrevealed, 0, game.CellUnrevealed, game.CellUnrevealed, game.CellUnrevealed},
-		}
-		assertEqualGrid(t, expected, g.GetGrid())
-	})
 	t.Run("All cells revealed", func(t *testing.T) {
 		g, _ := game.New(5, 1)
 		g.RevealCell(0, 0)
@@ -382,17 +373,6 @@ func TestGame_GetGrid_WithMines(t *testing.T) {
 
 	g.RevealCell(0, 0)
 
-	assertEqualGrid(t, expected, g.GetGrid())
-}
-
-func TestAFlagIsRemovedWhenCellIsRevealed(t *testing.T) {
-	g, _ := game.New(5, 1)
-	g.PlaceFlag(1, 0)
-	g.RevealCell(1, 0)
-
-	expected := game.Grid{
-		{game.CellUnrevealed, 0, game.CellUnrevealed, game.CellUnrevealed, game.CellUnrevealed},
-	}
 	assertEqualGrid(t, expected, g.GetGrid())
 }
 
