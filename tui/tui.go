@@ -158,7 +158,11 @@ func (gv GameModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (gv GameModel) renderInstructions(rendered *strings.Builder) {
-	rendered.WriteString("WASD: Move Around, F: Toggle Flag, Space: Reveal, R: Reset, Q: Quit")
+	rendered.WriteString("WASD/HJKL: Move Around\n")
+	rendered.WriteString("F: Toggle Flag\n")
+	rendered.WriteString("Space: Reveal\n")
+	rendered.WriteString("R: Reset\n")
+	rendered.WriteString("Q: Quit\n")
 }
 
 func (gv GameModel) Reset() {
